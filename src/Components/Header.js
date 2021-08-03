@@ -39,13 +39,19 @@ const SLink = styled(Link)`
 const header = ({ location: { pathname } }) => (
   <Header>
     <List>
-      <Item current={pathname === "/"}>
+      <Item
+        current={
+          !pathname.includes("/tv") &&
+          !pathname.includes("/search") &&
+          !pathname.includes("/show")
+        }
+      >
         <SLink to="/">Movies</SLink>
       </Item>
-      <Item current={pathname === "/tv"}>
+      <Item current={pathname.includes("/tv") || pathname.includes("/show")}>
         <SLink to="/tv">TVs</SLink>
       </Item>
-      <Item current={pathname === "/search"}>
+      <Item current={pathname.includes("/search")}>
         <SLink to="/search">Search</SLink>
       </Item>
     </List>

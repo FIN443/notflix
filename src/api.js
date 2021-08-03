@@ -43,3 +43,7 @@ export const tvApi = {
       },
     }),
 };
+
+export const companyApi = {
+  getImages: (id) => api.get(`/company/${id}/images`),
+};

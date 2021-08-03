@@ -1,10 +1,14 @@
 import React from "react";
+import { Route, Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import Loader from "Components/Loader";
 import noPoster from "../../assets/noPosterSmall.png";
 import Message from "Components/Message";
+import Production from "Routes/Production";
+import Collection from "Routes/Collection";
+import Info from "Routes/Info";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -50,29 +54,26 @@ const Data = styled.div`
   margin-left: 10px;
 `;
 
-const Title = styled.h3`
-  font-size: 32px;
-  margin-bottom: 10px;
+const InsideTab = styled("div")`
+  margin: 20px 0px;
 `;
 
-const ItemContainer = styled.div`
-  margin: 20px 0;
+const TabList = styled("ul")`
+  display: flex;
 `;
 
-const Item = styled.span``;
-
-const Divider = styled.span`
-  margin: 0 10px;
+const TabItem = styled("li")`
+  margin-right: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: 2px solid #1abc9c;
+  padding: 5px;
+  border-radius: 3px;
+  background-color: ${(props) => (props.active ? "#1abc9c" : "transparent")};
+  color: ${(props) => (props.active ? "white" : "black")};
 `;
 
-const Overview = styled.p`
-  font-size: 12px;
-  opacity: 0.7;
-  line-height: 1.5;
-  width: 50%;
-`;
-
-const DetailPresenter = ({ result, loading, error }) =>
+const DetailPresenter = ({ result, loading, error, location: { pathname } }) =>
   loading ? (
     <>
       <Helmet>
@@ -102,32 +103,53 @@ const DetailPresenter = ({ result, loading, error }) =>
           }
         />
         <Data>
-          <Title>
-            {result.original_title
-              ? result.original_title
-              : result.original_name}
-          </Title>
-          <ItemContainer>
-            <Item>
-              {result.release_date
-                ? result.release_date.substring(0, 4)
-                : result.first_air_date.substring(0, 4)}
-            </Item>
-            <Divider>•</Divider>
-            <Item>
-              {result.runtime ? result.runtime : result.episode_run_time[0]} min
-            </Item>
-            <Divider>•</Divider>
-            <Item>
-              {result.genres &&
-                result.genres.map((genre, index) =>
-                  index === result.genres.length - 1
-                    ? genre.name
-                    : `${genre.name} / `
-                )}
-            </Item>
-          </ItemContainer>
-          <Overview>{result.overview}</Overview>
+          <InsideTab>
+            <TabList>
+              {console.log(pathname.split("/")[3])}
+              <TabItem
+                active={
+                  pathname.split("/")[3] === undefined ||
+                  pathname.split("/")[3] === ""
+                }
+              >
+                {console.log(result)}
+                <Link to={`/${pathname.split("/")[1]}/${result.id}`}>Info</Link>
+              </TabItem>
+              <TabItem active={pathname.split("/")[3] === "production"}>
+                <Link to={`/${pathname.split("/")[1]}/${result.id}/production`}>
+                  Production
+                </Link>
+              </TabItem>
+              {pathname.includes("/movie/") ? (
+                ""
+              ) : (
+                <TabItem active={pathname.split("/")[3] === "collection"}>
+                  <Link
+                    to={`/${pathname.split("/")[1]}/${result.id}/collection`}
+                  >
+                    Collections
+                  </Link>
+                </TabItem>
+              )}
+            </TabList>
+          </InsideTab>
+          <Route
+            path={`/${pathname.split("/")[1]}/${result.id}`}
+            component={Info}
+            exact
+          />
+          <Route
+            path={`/${pathname.split("/")[1]}/${result.id}/production`}
+            component={Production}
+          />
+          {pathname.includes("/movie/") ? (
+            ""
+          ) : (
+            <Route
+              path={`/${pathname.split("/")[1]}/${result.id}/collection`}
+              component={Collection}
+            />
+          )}
         </Data>
       </Content>
     </Container>
@@ -139,4 +161,4 @@ DetailPresenter.propTypes = {
   error: PropTypes.string,
 };
 
-export default DetailPresenter;
+export default withRouter(DetailPresenter);
