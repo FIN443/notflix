@@ -40,4 +40,4 @@ Use node v10.24.1
 - [Assignment 7(Solution)](https://codesandbox.io/s/day-ten-solution-forked-1r39d)
 - [Assignment 8](https://codesandbox.io/s/day-eleven-blueprint-forked-7ylw0)
 - [Assignment 9](https://codesandbox.io/s/day-13-blueprint-forked-tonnt)
-- [Notflix](https://fin443.github.io/notflix)
+- [Notflix](https://distracted-pike-fdc981.netlify.app/)
