@@ -51,7 +51,6 @@ const useAxios = (id, pathname) => {
   });
   useEffect(() => {
     if (state.isMovie) {
-      // ({ data: result } = await movieApi.movieDetail(parsedId));
       movieApi.movieDetail(id).then(({ data: result }) => {
         setState({
           ...state,
@@ -60,7 +59,6 @@ const useAxios = (id, pathname) => {
         });
       });
     } else {
-      // ({ data: result } = await tvApi.showDetail(parsedId));
       tvApi.showDetail(id).then(({ data: result }) => {
         setState({
           ...state,
@@ -107,13 +105,21 @@ function Info({ location: { pathname } }) {
           {result.homepage && <ILink href={result.homepage}>Homepage</ILink>}
         </Item>
       </ItemContainer>
+      <ItemContainer>
+        <Item>
+          {result.imdb_id && (
+            <ILink href={`https://www.imdb.com/title/${result.imdb_id}`}>
+              IMDb Link
+            </ILink>
+          )}
+        </Item>
+      </ItemContainer>
       <Overview>{result.overview}</Overview>
-      {pathname.includes("/movie/") &&
-        result.videos &&
+      {result.videos &&
         result.videos.results &&
-        result.videos.results.map((video) =>
+        result.videos.results.map((video, index) =>
           video.name.includes("Trailer") ? (
-            <>
+            <div key={index}>
               <VideoTitle>{video.name}</VideoTitle>
               <Video>
                 <iframe
@@ -121,12 +127,12 @@ function Info({ location: { pathname } }) {
                   height="315"
                   src={`https://www.youtube.com/embed/${video.key}`}
                   title="YouTube video player"
-                  frameborder="0"
+                  frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
+                  allowFullScreen
                 ></iframe>
               </Video>
-            </>
+            </div>
           ) : (
             ""
           )

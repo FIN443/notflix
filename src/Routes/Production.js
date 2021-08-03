@@ -51,7 +51,6 @@ const useAxios = (id, pathname) => {
   });
   useEffect(() => {
     if (state.isMovie) {
-      // ({ data: result } = await movieApi.movieDetail(parsedId));
       movieApi.movieDetail(id).then(({ data: result }) => {
         setState({
           ...state,
@@ -60,7 +59,6 @@ const useAxios = (id, pathname) => {
         });
       });
     } else {
-      // ({ data: result } = await tvApi.showDetail(parsedId));
       tvApi.showDetail(id).then(({ data: result }) => {
         setState({
           ...state,

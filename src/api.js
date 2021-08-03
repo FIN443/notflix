@@ -47,3 +47,12 @@ export const tvApi = {
 export const companyApi = {
   getImages: (id) => api.get(`/company/${id}/images`),
 };
+
+export const collectionApi = {
+  getDetail: (id) => api.get(`/collection/${id}`),
+};
+
+export const tvSeasonApi = {
+  getDetail: (tvId, seasonNumber) =>
+    api.get(`/tv/${tvId}/season/${seasonNumber}`),
+};

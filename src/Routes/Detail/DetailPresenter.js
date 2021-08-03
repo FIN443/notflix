@@ -9,6 +9,7 @@ import Message from "Components/Message";
 import Production from "Routes/Production";
 import Collection from "Routes/Collection";
 import Info from "Routes/Info";
+import Season from "Routes/Season";
 
 const Container = styled.div`
   height: calc(100vh - 50px);
@@ -120,17 +121,27 @@ const DetailPresenter = ({ result, loading, error, location: { pathname } }) =>
                   Production
                 </Link>
               </TabItem>
-              {pathname.includes("/movie/") ? (
-                ""
-              ) : (
-                <TabItem active={pathname.split("/")[3] === "collection"}>
-                  <Link
-                    to={`/${pathname.split("/")[1]}/${result.id}/collection`}
-                  >
-                    Collections
-                  </Link>
-                </TabItem>
-              )}
+              {pathname.includes("/movie/")
+                ? result.belongs_to_collection && (
+                    <TabItem active={pathname.split("/")[3] === "collections"}>
+                      <Link
+                        to={`/${pathname.split("/")[1]}/${
+                          result.id
+                        }/collections`}
+                      >
+                        Collections
+                      </Link>
+                    </TabItem>
+                  )
+                : result.seasons && (
+                    <TabItem active={pathname.split("/")[3] === "seasons"}>
+                      <Link
+                        to={`/${pathname.split("/")[1]}/${result.id}/seasons`}
+                      >
+                        Seasons
+                      </Link>
+                    </TabItem>
+                  )}
             </TabList>
           </InsideTab>
           <Route
@@ -143,11 +154,14 @@ const DetailPresenter = ({ result, loading, error, location: { pathname } }) =>
             component={Production}
           />
           {pathname.includes("/movie/") ? (
-            ""
+            <Route
+              path={`/${pathname.split("/")[1]}/${result.id}/collections`}
+              component={Collection}
+            />
           ) : (
             <Route
-              path={`/${pathname.split("/")[1]}/${result.id}/collection`}
-              component={Collection}
+              path={`/${pathname.split("/")[1]}/${result.id}/seasons`}
+              component={Season}
             />
           )}
         </Data>
